@@ -1,0 +1,56 @@
+﻿START
+    IMPORT word_list
+    SET secret_word = RANDOM word from word_list
+    SET attempts_made = 0
+
+
+    SET difficulty_levels = ["easy", "medium", "hard"]
+    SET attempts_limit = [10, 6, 4]
+
+
+    INPUT "Select difficulty: " → user_difficulty
+    FOR i FROM 0 TO LENGTH(difficulty_levels) - 1 DO
+        IF user_difficulty == difficulty_levels[i] THEN
+            SET max_attempts = attempts_limit[i]
+        END IF
+    END FOR
+
+
+    REPEAT
+        INPUT "Enter your guess: " → guess
+        IF guess is invalid THEN
+            OUTPUT "Not a valid guess."
+        ELSE
+            CALL feedback_list = CHECK_FUNCTION(guess, secret_word)
+            OUTPUT feedback_list
+            INCREMENT attempts_made
+            IF guess == secret_word THEN
+                OUTPUT "Correct! The word is " + secret_word
+                EXIT
+            ELSE IF attempts_made == max_attempts THEN
+                OUTPUT "Out of attempts! The word was " + secret_word
+                EXIT
+            END IF
+        END IF
+    UNTIL attempts_made == max_attempts OR guess == secret_word
+END
+
+
+FUNCTION CHECK_FUNCTION(guess, secret_word)
+    SET feedback = []
+    FOR i FROM 0 TO LENGTH(secret_word) - 1 DO
+        SET match = "x"
+        FOR j FROM 0 TO LENGTH(secret_word) - 1 DO
+            IF guess[i] == secret_word[j] THEN
+                IF i == j THEN
+                    SET match = "+"
+                ELSE
+                    SET match = "~"
+                END IF
+                BREAK
+            END IF
+        END FOR
+        APPEND match TO feedback
+    END FOR
+    RETURN feedback
+END FUNCTION
