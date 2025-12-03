@@ -3,10 +3,8 @@
     SET secret_word = RANDOM word from word_list
     SET attempts_made = 0
 
-
     SET difficulty_levels = ["easy", "medium", "hard"]
     SET attempts_limit = [10, 6, 4]
-
 
     INPUT "Select difficulty: " → user_difficulty
     FOR i FROM 0 TO LENGTH(difficulty_levels) - 1 DO
